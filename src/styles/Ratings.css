@@ -1,0 +1,23 @@
+.ratings {
+  padding: 100px 50px 50px;
+  background-color: #141414;
+  color: white;
+  min-height: 100vh;
+}
+
+.ratings-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.ratings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 50px;
+  color: #b3b3b3;
+}

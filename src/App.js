@@ -1,0 +1,30 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import NavBar from './components/Navbar';
+import Home from './pages/Home';
+import Browse from './pages/Browse';
+import Ratings from './pages/Ratings';
+import Contact from './pages/Contact';
+import Login from './pages/Login';
+import './App.css';
+import Footer from './components/Footer'; 
+function App() {
+  const { user } = useAuth();
+
+  return (
+    <div className="app">
+      {user && <NavBar />}
+      <Routes>
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+        <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+        <Route path="/browse" element={user ? <Browse /> : <Navigate to="/login" />} />
+        <Route path="/ratings" element={user ? <Ratings /> : <Navigate to="/login" />} />
+        <Route path="/contact" element={user ? <Contact /> : <Navigate to="/login" />} />
+      </Routes>
+      <Footer />
+    </div>
+  );
+}
+
+export default App;

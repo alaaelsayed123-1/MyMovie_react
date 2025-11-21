@@ -1,0 +1,55 @@
+.home {
+  background-color: #141414;
+  color: white;
+}
+
+.hero-section {
+  height: 70vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+  position: relative;
+}
+
+.hero-content {
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.hero-title {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.hero-meta span {
+  margin-right: 15px;
+}
+
+.hero-description {
+  margin-top: 15px;
+  font-size: 16px;
+  max-width: 600px;
+}
+
+.hero-buttons button {
+  margin-top: 20px;
+  margin-right: 10px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-play {
+  background-color: #e50914;
+  color: white;
+}
+
+.btn-info {
+  background-color: #333;
+  color: white;
+}
