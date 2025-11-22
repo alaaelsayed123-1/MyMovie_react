@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom'; 
+import { HashRouter } from 'react-router-dom'; // استبدل BrowserRouter بـ HashRouter
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
 import { FavoritesProvider } from './contexts/FavoritesContext';
@@ -8,12 +8,12 @@ import { FavoritesProvider } from './contexts/FavoritesContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <AuthProvider>
         <FavoritesProvider>
           <App />
         </FavoritesProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
