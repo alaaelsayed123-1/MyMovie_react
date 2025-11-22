@@ -7,8 +7,9 @@ import Browse from './pages/Browse';
 import Ratings from './pages/Ratings';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import Footer from './components/Footer';
 import './App.css';
-import Footer from './components/Footer'; 
+
 function App() {
   const { user } = useAuth();
 
