@@ -14,6 +14,6 @@ root.render(
           <App />
         </FavoritesProvider>
       </AuthProvider>
-    </HashRouter>
+    </BrowserRouter>
   </React.StrictMode>
 );
