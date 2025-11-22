@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/MyMovie_react/static/css/main.d3fafe32.css",
-    "main.js": "/MyMovie_react/static/js/main.ca162110.js",
+    "main.js": "/MyMovie_react/static/js/main.3324c900.js",
     "static/media/movielogo.jpg": "/MyMovie_react/static/media/movielogo.42bb11ad2da01eef09c2.jpg",
     "static/media/dr.webp": "/MyMovie_react/static/media/dr.e05d29770e648cb9afe0.webp",
     "static/media/Star wars.webp": "/MyMovie_react/static/media/Star wars.275c535a311f87117da0.webp",
@@ -35,10 +35,10 @@
     "static/media/godfather.webp": "/MyMovie_react/static/media/godfather.6d381d6e606be880c102.webp",
     "index.html": "/MyMovie_react/index.html",
     "main.d3fafe32.css.map": "/MyMovie_react/static/css/main.d3fafe32.css.map",
-    "main.ca162110.js.map": "/MyMovie_react/static/js/main.ca162110.js.map"
+    "main.3324c900.js.map": "/MyMovie_react/static/js/main.3324c900.js.map"
   },
   "entrypoints": [
     "static/css/main.d3fafe32.css",
-    "static/js/main.ca162110.js"
+    "static/js/main.3324c900.js"
   ]
 }
