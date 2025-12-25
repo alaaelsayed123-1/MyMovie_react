@@ -1,5 +1,11 @@
 .movie-row {
+  position: relative;
   margin: 20px 0;
+}
+
+.movie-row h2 {
+  margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 .row-container {
@@ -8,34 +14,38 @@
 
 .movie-row-items {
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
   padding: 10px 0;
-  scrollbar-width: none;
 }
 
 .movie-row-items::-webkit-scrollbar {
-  display: none;
+  display: none; /* hide scrollbar */
 }
 
-.scroll-btn {
+.movie-row button {
+  all: unset; /* remove default browser button styling */
+  cursor: pointer;
+  font-size: 2rem;
+  color: white;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0,0,0,0.6);
-  border: none;
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 50%;
-  z-index: 2;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.scroll-btn.left {
-  left: 0;
+.movie-row:hover button {
+  opacity: 1;
 }
 
-.scroll-btn.right {
-  right: 0;
-}
+.scroll-left { left: 10px; }
+.scroll-right { right: 10px; }
