@@ -1,26 +1,61 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = (email, password) => {
-    // login demo
-    if (email === 'demo@streamflix.com' && password === 'demo123') {
-      setUser({ email });
-      return true;
+  // ================== SIGNUP ==================
+const signup = async (username, email, password) => {
+  try {
+    const res = await axios.post("http://localhost:5000/signup", {
+      username,
+      email,
+      password
+    });
+
+    return res.data;
+  } catch (err) {
+    return {
+      success: false,
+      message: err.response?.data?.message || "Server error"
+    };
+  }
+};
+
+const login = async (email, password) => {
+  try {
+    const res = await axios.post("http://localhost:5000/login", {
+      email,
+      password
+    });
+
+    if (res.data.success) {
+      setUser(res.data.user);
     }
-    return false;
+
+    return res.data;
+  } catch (err) {
+    return {
+      success: false,
+      message: err.response?.data?.message || "Server error"
+    };
+  }
+};
+
+
+  // ================== LOGOUT ==================
+  const logout = () => {
+    setUser(null);
   };
 
-  const logout = () => setUser(null);
-
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, signup, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
