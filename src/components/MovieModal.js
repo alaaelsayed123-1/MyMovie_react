@@ -5,8 +5,10 @@ import '../styles/MovieModal.css';
 const MovieModal = ({ movie, onClose }) => {
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
+  const movieId = movie.id;
+
   const handleFavoriteClick = () => {
-    if (isFavorite(movie.id)) removeFromFavorites(movie.id);
+    if (isFavorite(movieId)) removeFromFavorites(movieId);
     else addToFavorites(movie);
   };
 
@@ -14,9 +16,11 @@ const MovieModal = ({ movie, onClose }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✖</button>
+
         <div className="modal-header">
-          <img src={movie.image || "/placeholder.svg"} alt={movie.title} />
+          <img src={`http://localhost:5000/images/${movie.image}`} alt={movie.title} />
         </div>
+
         <div className="modal-body">
           <h2>{movie.title}</h2>
           <div className="modal-meta">
@@ -26,10 +30,14 @@ const MovieModal = ({ movie, onClose }) => {
             <span>{movie.category}</span>
           </div>
           <p>{movie.description}</p>
+
           <div className="modal-actions">
             <button>▶ Play</button>
-            <button onClick={handleFavoriteClick}>
-              {isFavorite(movie.id) ? '❤ Remove' : '♡ Add'}
+            <button
+              className={`favorite-btn ${isFavorite(movieId) ? 'active' : ''}`}
+              onClick={handleFavoriteClick}
+            >
+              {isFavorite(movieId) ? '❤ Remove' : '♡ Add'}
             </button>
           </div>
         </div>
@@ -39,3 +47,4 @@ const MovieModal = ({ movie, onClose }) => {
 };
 
 export default MovieModal;
+
