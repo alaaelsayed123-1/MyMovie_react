@@ -1,43 +1,53 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import '../styles/Login.css'; 
+import "../styles/Login.css";
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (login(email, password)) {
-      navigate('/');
-    } else {
-      alert('Invalid credentials');
-    }
+    const success = await login(email, password);
+    if (success) navigate('/');
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        /><br /><br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        /><br /><br />
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-page-wrapper">
+      <div className="login-page">
+        <h1>STREAMFLIX</h1>
+        <p className="tagline">Unlimited movies. Endless stories.</p>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+
+          <button type="submit">Sign In</button>
+        </form>
+
+        <p>
+          Don&apos;t have an account? <Link to="/Signup">Sign up here</Link>
+        </p>
+      </div>
     </div>
   );
-}
+};
 
 export default Login;
+
