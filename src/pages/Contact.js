@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
-import '../styles/Contact.css';
-import contactImage from '../assets/movielogo.jpg'; // ضع movielogo.jpg هنا
+import React, { useState } from "react";
+import "../styles/Contact.css";
+import contactImage from "../assets/movielogo.jpg";
 
 const Contact = () => {
-  const [state, setState] = useState({ fname: '', email: '', message: '' });
+  const [state, setState] = useState({ name: "", email: "", message: "" });
 
-  const handleChange = (e) => setState({ ...state, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(JSON.stringify(state));
-    setState({ fname: '', email: '', message: '' });
+
+    try {
+      const response = await fetch("http://localhost:5000/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state)
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Welcome! We will contact you soon 😊");
+        setState({ name: "", email: "", message: "" });
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert("Server error. Please try again later.");
+    }
   };
 
   return (
@@ -19,26 +38,31 @@ const Contact = () => {
         className="leftSide"
         style={{ backgroundImage: `url(${contactImage})` }}
       ></div>
+
       <div className="rightSide">
         <h1>Contact Us</h1>
+
         <form onSubmit={handleSubmit}>
           <label>Full Name</label>
           <input
-            name="fname"
+            type="text"
+            name="name"
             placeholder="Full Name"
-            value={state.fname}
+            value={state.name}
             onChange={handleChange}
             required
           />
+
           <label>Email</label>
           <input
-            name="email"
             type="email"
+            name="email"
             placeholder="Email"
             value={state.email}
             onChange={handleChange}
             required
           />
+
           <label>Message</label>
           <textarea
             name="message"
@@ -46,7 +70,8 @@ const Contact = () => {
             value={state.message}
             onChange={handleChange}
             required
-          />
+          ></textarea>
+
           <button type="submit">Send</button>
         </form>
       </div>
@@ -55,3 +80,4 @@ const Contact = () => {
 };
 
 export default Contact;
+
