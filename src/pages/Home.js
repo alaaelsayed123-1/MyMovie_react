@@ -6,11 +6,18 @@ import '../styles/Home.css';
 const Home = () => {
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/movies')
-      .then(res => setMovies(res.data))
-      .catch(err => console.error(err));
-  }, []);
+ useEffect(() => {
+  const fetchMovies = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/movies");
+      setMovies(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchMovies();
+}, []);
 
   if (movies.length === 0) return <p>Loading movies...</p>;
 
@@ -46,4 +53,6 @@ const Home = () => {
 };
 
 export default Home;
+
+
 
