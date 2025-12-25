@@ -1,33 +1,49 @@
-import React from 'react';
-import { moviesData } from '../data/moviesData';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import MovieRow from '../components/MovieRow';
 import '../styles/Home.css';
 
 const Home = () => {
+  const [movies, setMovies] = useState([]);
 
-  const featuredMovie = moviesData[0];
+  useEffect(() => {
+    axios.get('http://localhost:5000/movies')
+      .then(res => setMovies(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
-  const actionMovies = moviesData.filter(movie => movie.category === "Action");
-  const dramaMovies = moviesData.filter(movie => movie.category === "Drama");
-  const sciFiMovies = moviesData.filter(movie => movie.category === "Sci-Fi");
-  const crimeMovies = moviesData.filter(movie => movie.category === "Crime");
+  if (movies.length === 0) return <p>Loading movies...</p>;
+
+  const featuredMovie = movies[0];
+
+  const actionMovies = movies.filter(movie => movie.category === "Action");
+  const dramaMovies = movies.filter(movie => movie.category === "Drama");
+  const sciFiMovies = movies.filter(movie => movie.category === "Sci-Fi");
+  const crimeMovies = movies.filter(movie => movie.category === "Crime");
 
   return (
     <div>
+      {/* Hero Section */}
       <div
         className="hero-section"
-        style={{ backgroundImage: `url(${featuredMovie.image})` }}
+        style={{ backgroundImage: `url(http://localhost:5000/images/${featuredMovie.image})` }}
       >
         <h1>{featuredMovie.title}</h1>
         <p>{featuredMovie.description}</p>
+        <div className="hero-buttons">
+    <button className="play-btn">▶ Play</button>
+    <button className="info-btn">ℹ Info</button>
+  </div>
       </div>
 
-      <MovieRow title="Action Movies" movies={actionMovies} rowId="row-action" />
-      <MovieRow title="Sci-Fi Movies" movies={sciFiMovies} rowId="row-scifi" />
-      <MovieRow title="Drama" movies={dramaMovies} rowId="row-drama" />
-      <MovieRow title="Crime" movies={crimeMovies} rowId="row-crime" />
+      {/* Movie Rows */}
+      <MovieRow title="Action Movies" movies={actionMovies} />
+      <MovieRow title="Sci-Fi Movies" movies={sciFiMovies} />
+      <MovieRow title="Drama" movies={dramaMovies} />
+      <MovieRow title="Crime" movies={crimeMovies} />
     </div>
   );
 };
 
 export default Home;
+
