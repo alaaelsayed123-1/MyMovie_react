@@ -35,24 +35,14 @@ db.connect((err) => {
 
 // GET MOVIES WITH OPTIONAL CATEGORY FILTER
 app.get("/movies", (req, res) => {
-  const category = req.query.category;
+  const { category } = req.query;
+  const sql = "SELECT * FROM movies" + (category && category !== "All" ? " WHERE category = ?" : "");
 
-  let sql = "SELECT * FROM movies";
-  let params = [];
-
-  if (category && category !== "All") {
-    sql += " WHERE category = ?";
-    params.push(category);
-  }
-
-  db.query(sql, params, (err, results) => {
-    if (err) {
-      console.log("SQL ERROR:", err);
-      return res.status(500).json([]);
-    }
+  db.query(sql, category && category !== "All" ? [category] : [], (err, results) => {
+    if (err) return res.status(500).json([]);
     res.json(results);
   });
-});
+});;
 
 // GET SINGLE MOVIE BY ID
 app.get("/movies/:id", (req, res) => {
