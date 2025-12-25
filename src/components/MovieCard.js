@@ -3,34 +3,56 @@ import { useFavorites } from '../contexts/FavoritesContext';
 import MovieModal from './MovieModal';
 import '../styles/MovieCard.css';
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, disableModal = false }) => {
   const [showModal, setShowModal] = useState(false);
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
+  const movieId = movie.id;
+
   const handleFavoriteClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (isFavorite(movie.id)) removeFromFavorites(movie.id);
+
+    if (isFavorite(movieId)) removeFromFavorites(movieId);
     else addToFavorites(movie);
   };
 
   return (
     <>
-      <div className="movie-card" onClick={() => setShowModal(true)}>
-        <img src={movie.image || "/placeholder.svg"} alt={movie.title} />
-        <div className="movie-card-overlay">
+      <div
+        className="movie-card"
+        onClick={() => !disableModal && setShowModal(true)}
+      >
+        <img
+          src={`http://localhost:5000/images/${movie.image}`}
+          alt={movie.title}
+        />
+
+        <div
+          className="movie-card-overlay"
+          onClick={(e) => e.stopPropagation()}
+        >
           <h3>{movie.title}</h3>
           <div className="movie-card-info">
             <span className="rating">★ {movie.rating}</span>
             <span>{movie.year}</span>
           </div>
-          <button className="favorite-btn" onClick={handleFavoriteClick}>
-            {isFavorite(movie.id) ? '❤' : '♡'}
+
+          <button
+            className={`favorite-btn ${isFavorite(movieId) ? 'active' : ''}`}
+            onClick={handleFavoriteClick}
+          >
+            {isFavorite(movieId) ? '❤' : '♡'}
           </button>
         </div>
       </div>
-      {showModal && <MovieModal movie={movie} onClose={() => setShowModal(false)} />}
+
+      {showModal && !disableModal && (
+        <MovieModal movie={movie} onClose={() => setShowModal(false)} />
+      )}
     </>
   );
 };
 
 export default MovieCard;
+
