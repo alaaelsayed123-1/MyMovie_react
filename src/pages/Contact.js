@@ -1,33 +1,29 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "../styles/Contact.css";
 import contactImage from "../assets/movielogo.jpg";
 
 const Contact = () => {
-  const [state, setState] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
 
   const handleChange = (e) => {
-    setState({ ...state, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/contacts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(state)
-      });
+      const response = await axios.post("http://localhost:5000/contacts", formData);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.data.success) {
         alert("Welcome! We will contact you soon 😊");
-        setState({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", message: "" });
       } else {
-        alert(data.message);
+        alert(response.data.message);
       }
     } catch (err) {
+      console.error(err);
       alert("Server error. Please try again later.");
     }
   };
@@ -48,7 +44,7 @@ const Contact = () => {
             type="text"
             name="name"
             placeholder="Full Name"
-            value={state.name}
+            value={formData.name}
             onChange={handleChange}
             required
           />
@@ -58,7 +54,7 @@ const Contact = () => {
             type="email"
             name="email"
             placeholder="Email"
-            value={state.email}
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -67,7 +63,7 @@ const Contact = () => {
           <textarea
             name="message"
             placeholder="Message"
-            value={state.message}
+            value={formData.message}
             onChange={handleChange}
             required
           ></textarea>
@@ -80,4 +76,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
