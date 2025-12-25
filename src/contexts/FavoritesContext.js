@@ -1,21 +1,81 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
+  const { user } = useAuth();
   const [favorites, setFavorites] = useState([]);
 
-  const addToFavorites = (movie) => {
-    if (!favorites.find(fav => fav.id === movie.id)) {
-      setFavorites([...favorites, movie]);
+  // Fetch favorites when user logs in
+  useEffect(() => {
+    if (user) {
+      axios.get(`http://localhost:5000/favorites/${user.id}`)
+        .then(res => {
+          // normalize favorites
+          const normalized = res.data.map(fav => ({
+            id: fav.favoriteRowId,   // backend favorite row ID
+            movieId: fav.movieId,
+            title: fav.title,
+            image: fav.image,
+            year: fav.year,
+            rating: fav.rating,
+            duration: fav.duration || '',
+            category: fav.category || '',
+            description: fav.description || ''
+          }));
+          setFavorites(normalized);
+        })
+        .catch(err => console.log(err));
+    } else {
+      setFavorites([]);
+    }
+  }, [user]);
+
+  // Add movie to favorites
+  const addToFavorites = async (movie) => {
+    if (!user) return alert('Login first!');
+    try {
+      const res = await axios.post('http://localhost:5000/favorites', {
+        userId: user.id,
+        movieId: movie.id
+      });
+
+      if (res.data.success) {
+        setFavorites(prev => [
+          ...prev,
+          {
+            id: res.data.insertId,  // this is the favorite row ID
+            movieId: movie.id,
+            title: movie.title,
+            image: movie.image,
+            year: movie.year,
+            rating: movie.rating,
+            duration: movie.duration || '',
+            category: movie.category || '',
+            description: movie.description || ''
+          }
+        ]);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const removeFromFavorites = (movieId) => {
-    setFavorites(favorites.filter(fav => fav.id !== movieId));
+  // Remove movie from favorites
+  const removeFromFavorites = async (movieId) => {
+    const fav = favorites.find(f => f.movieId === movieId);
+    if (!fav) return;
+    try {
+      await axios.delete(`http://localhost:5000/favorites/${fav.id}`);
+      setFavorites(prev => prev.filter(f => f.movieId !== movieId));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const isFavorite = (movieId) => favorites.some(fav => fav.id === movieId);
+  const isFavorite = (movieId) => favorites.some(f => f.movieId === movieId);
 
   return (
     <FavoritesContext.Provider value={{ favorites, addToFavorites, removeFromFavorites, isFavorite }}>
