@@ -10,27 +10,39 @@ const Browse = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("title");
 
-  // GET categories from backend
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/categories")
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  // GET movies when category changes
-  useEffect(() => {
-    let url = "http://localhost:5000/movies";
-
-    if (category !== "All") {
-      url += `?category=${encodeURIComponent(category)}`;
+// GET categories from backend
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/categories");
+      setCategories(response.data);
+    } catch (err) {
+      console.error(err);
     }
+  };
 
-    axios
-      .get(url)
-      .then((res) => setMovies(res.data))
-      .catch((err) => console.error(err));
-  }, [category]);
+  fetchCategories();
+}, []);
+
+// GET movies when category changes
+useEffect(() => {
+  const fetchMovies = async () => {
+    try {
+      let url = "http://localhost:5000/movies";
+
+      if (category !== "All") {
+        url += `?category=${encodeURIComponent(category)}`;
+      }
+
+      const response = await axios.get(url);
+      setMovies(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchMovies();
+}, [category]);
 
   const filteredMovies = movies
     .filter((movie) =>
@@ -100,4 +112,6 @@ const Browse = () => {
 };
 
 export default Browse;
+
+
 
